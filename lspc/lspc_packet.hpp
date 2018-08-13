@@ -105,12 +105,28 @@ class Packet
       #endif
     }
 
+    if (encoded_buffer_.size() > 258)
+    {
+      degenerate_ = true;
+      #ifdef __EXCEPTIONS
+        throw std::length_error("Encoded buffer too big.");
+      #endif
+    }
+
     packet_type_ = encoded_buffer_[1];
     if (packet_type_ == 0x00)
     {
       degenerate_ = true;
       #ifdef __EXCEPTIONS
         throw std::runtime_error("Received packet with type 0x00.");
+      #endif
+    }
+
+    if (encoded_buffer_.size() != encoded_buffer_[2] + 3)
+    {
+      degenerate_ = true;
+      #ifdef __EXCEPTIONS
+        throw std::runtime_error("Packet length field does not match buffer size.");
       #endif
     }
 

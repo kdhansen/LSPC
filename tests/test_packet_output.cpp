@@ -7,34 +7,19 @@
 
 int main(int argc, char const *argv[])
 {
-  if (2 > argc)
-  {
-    return false;
-  }
-  uint8_t packet_type = atoi(argv[1]);
-
-  std::vector<uint8_t> payload;
-  payload.reserve(argc - 2);
-  for (int i = 2; i < argc; ++i)
-  {
-    payload.push_back(atoi(argv[i]));
-  }
-
+  uint8_t packet_type = 1;
+  std::vector<uint8_t> payload = {11, 22, 00, 33};
   LSPC::Packet packet_from_payload(packet_type, payload);
 
-#ifndef __EXCEPTIONS
+#ifndef __cpp_exceptions
   if (packet_from_payload.IsDegenerate())
   {
     return 1;
   }
 #endif
+  // Getting the output as pointer
   auto enc_buffer = packet_from_payload.EncodedDataPtr();
   auto enc_size = packet_from_payload.EncodedDataSize();
-  for (size_t i = 0; i < enc_size; ++i)
-  {
-    std::cout << " " << int(enc_buffer[i]);
-  }
-  std::cout << '\n';
 
   // Getting the output of the encoding again via the std::vector interface.
   auto enc_buffer_vector = packet_from_payload.EncodedBuffer();
