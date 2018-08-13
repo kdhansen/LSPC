@@ -11,7 +11,7 @@ int main(int argc, char const *argv[])
   std::vector<uint8_t> payload = {11, 22, 00, 33};
   LSPC::Packet packet_from_payload(packet_type, payload);
 
-#ifndef __cpp_exceptions
+#ifndef __EXCEPTIONS
   if (packet_from_payload.IsDegenerate())
   {
     return 1;
