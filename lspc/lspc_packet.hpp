@@ -85,7 +85,6 @@ class Packet
     // not true, something has gone wrong.
     if (code_accumulator != dec_payload_size + 1)
     {
-      std::cout << "acc:" << code_accumulator << " psize:" << dec_payload_size << "\n";
       return false;
     }
 
