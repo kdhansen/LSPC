@@ -1,9 +1,10 @@
-#include <vector>
+#include "lspc/packet.hpp"
+
 #include <cstdint>
 #include <cstdlib>
-#include <iostream>
 #include <iomanip>
-#include "lspc/lspc_packet.hpp"
+#include <iostream>
+#include <vector>
 
 int main(int argc, char const *argv[])
 {

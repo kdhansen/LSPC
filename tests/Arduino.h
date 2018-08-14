@@ -28,7 +28,7 @@ public:
     for (int i = 0; i < N; ++i)
     {
         // ss << " " << std::setw(2) << std::hex << 55;
-        ss << " " << std::setw(2) << std::hex << static_cast<int>(s[i]);
+        ss << " 0x" << std::setw(2) << std::hex << static_cast<int>(s[i]);
     }
     std::cout << ss.str();
     return N;

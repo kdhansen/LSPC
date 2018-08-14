@@ -3,7 +3,7 @@ include(CTest)
 include_directories(.)
 
 
-###### Encoding Tests ######
+###### Packet: Encoding Tests ######
 add_executable(test_packet_encoding test_packet_encoding.cpp)
 
 # Test a simple benign input. This should work.
@@ -42,7 +42,7 @@ add_test(NAME PacketEncodingLongPayload COMMAND test_packet_encoding 1 1 2 3 4
 set_tests_properties (PacketEncodingLongPayload PROPERTIES WILL_FAIL true)
 
 
-###### Encoding tests without exceptions (Arduino Style) ######
+###### Packet: Encoding tests without exceptions (Arduino Style) ######
 add_executable(test_encoding_noexeptions test_packet_encoding.cpp)
 get_target_property(TEMP test_encoding_noexeptions COMPILE_FLAGS)
 if(TEMP STREQUAL "TEMP-NOTFOUND")
@@ -64,7 +64,7 @@ add_test(NAME PacketEncodingZeroTypeNoExcept
 set_tests_properties (PacketEncodingZeroTypeNoExcept PROPERTIES WILL_FAIL true)
 
 
-###### Decoding Tests ######
+###### Packet: Decoding Tests ######
 add_executable(test_packet_decoding test_packet_decoding.cpp)
 
 # Test a benign encoded input. This should work.
@@ -152,7 +152,21 @@ set_tests_properties (PacketDecodingZeroType PROPERTIES WILL_FAIL true)
  246 247 248 249 250 251 252 253 254 255)
 set_tests_properties (PacketDecodingTooLongBuffer PROPERTIES WILL_FAIL true)
 
-# Output tests
+###### Packet: Output tests ######
 add_executable(test_packet_output test_packet_output.cpp)
+add_test(NAME PacketOutput COMMAND test_packet_output)
 
-add_test(NAME PacketOutput COMMAND test_packet_encoding)
+
+###### Arduino API test ######
+add_executable(test_arduino_api_send test_arduino_api_send.cpp)
+add_test(NAME ArduinoApiSend COMMAND test_arduino_api_send)
+set_tests_properties (ArduinoApiSend PROPERTIES
+  PASS_REGULAR_EXPRESSION " 0x00 0x01 0x06 0x04 0x0b 0x16 0x21 0x02 0x2c 0x00 \
+0x01 0x06 0x04 0x0b 0x16 0x21 0x02 0x2c 0x00 0x01 0x06 0x04 0x0b 0x16 0x21 \
+0x02 0x2c 0x00 0x01 0x06 0x04 0x0b 0x16 0x21 0x02 0x2c 0x00 0x01 0x06 0x04 \
+0x0b 0x16 0x21 0x02 0x2c\n")
+
+add_executable(test_arduino_api_receive test_arduino_api_receive.cpp)
+add_test(NAME ArduinoApiReceive COMMAND test_arduino_api_receive)
+set_tests_properties (ArduinoApiReceive PROPERTIES
+  PASS_REGULAR_EXPRESSION "Handling: 0x0b 0x16 0x21 0x00 0x2c\n")

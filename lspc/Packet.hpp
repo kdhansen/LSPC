@@ -2,6 +2,7 @@
 #define LSPC_PACKET_HPP
 
 #include <cstddef>
+#include <cstdint>
 #include <vector>
 
 #ifdef __EXCEPTIONS
