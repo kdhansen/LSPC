@@ -1,11 +1,11 @@
 #if !defined(FAKE_ARDUINO)
 #define FAKE_ARDUINO
 
-#include <iostream>
-#include <sstream>
-#include <iomanip>
 #include <cstddef>
+#include <iomanip>
+#include <iostream>
 #include <queue>
+#include <sstream>
 
 class FakeSerial
 {

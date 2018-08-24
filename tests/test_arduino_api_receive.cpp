@@ -3,6 +3,7 @@
 #include <array>
 #include <cstdint>
 #include <iostream>
+#include <iomanip>
 
 #include "Arduino.h"
 
@@ -16,7 +17,6 @@ void handl(const std::vector<uint8_t>& payload)
   ss << std::setfill('0');
   for (int i = 0; i < payload.size(); ++i)
   {
-      // ss << " " << std::setw(2) << std::hex << 55;
       ss << " 0x" << std::setw(2) << std::hex << static_cast<int>(payload[i]);
   }
   std::cout << ss.str();

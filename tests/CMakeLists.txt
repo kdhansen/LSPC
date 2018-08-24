@@ -1,6 +1,9 @@
+find_package(Boost REQUIRED system)
+
 include(CTest)
 
 include_directories(.)
+include_directories(${Boost_INCLUDE_DIRS})
 
 
 ###### Packet: Encoding Tests ######
@@ -170,3 +173,19 @@ add_executable(test_arduino_api_receive test_arduino_api_receive.cpp)
 add_test(NAME ArduinoApiReceive COMMAND test_arduino_api_receive)
 set_tests_properties (ArduinoApiReceive PROPERTIES
   PASS_REGULAR_EXPRESSION "Handling: 0x0b 0x16 0x21 0x00 0x2c\n")
+
+
+###### Boost API test ######
+add_executable(test_boost_api_send test_boost_api_send.cpp)
+target_link_libraries(test_boost_api_send ${Boost_LIBRARIES} ws2_32)
+add_test(NAME BoostApiSend COMMAND test_boost_api_send COM8 COM9)
+set_tests_properties (BoostApiSend PROPERTIES
+  PASS_REGULAR_EXPRESSION " 0 1 6 4 11 22 33 2 44")
+
+add_executable(test_boost_api_receive test_boost_api_receive.cpp)
+target_link_libraries(test_boost_api_receive ${Boost_LIBRARIES} ws2_32)
+add_test(NAME BoostApiReceive COMMAND test_boost_api_receive COM8 COM9)
+set_tests_properties (BoostApiReceive PROPERTIES
+  PASS_REGULAR_EXPRESSION "Handling: 0x0b 0x16 0x21 0x00 0x2c\n")
+set_tests_properties (BoostApiReceive PROPERTIES
+  DEPENDS BoostApiSend)

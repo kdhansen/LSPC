@@ -1,5 +1,5 @@
-#ifndef LSPC_HPP
-#define LSPC_HPP
+#ifndef LSPC_ARDUINO_HPP
+#define LSPC_ARDUINO_HPP
 
 #include <Arduino.h>
 #include "lspc/Packet.hpp"
@@ -135,4 +135,4 @@ public:
 
 } // namespace LSPC
 
-#endif // LSPC_HPP
+#endif // LSPC_ARDUINO_HPP
