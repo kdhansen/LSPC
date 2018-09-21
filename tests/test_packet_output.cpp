@@ -10,7 +10,7 @@ int main(int argc, char const *argv[])
 {
   uint8_t packet_type = 1;
   std::vector<uint8_t> payload = {11, 22, 00, 33};
-  LSPC::Packet packet_from_payload(packet_type, payload);
+  lspc::Packet packet_from_payload(packet_type, payload);
 
 #ifndef __EXCEPTIONS
   if (packet_from_payload.IsDegenerate())

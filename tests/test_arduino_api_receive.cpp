@@ -8,7 +8,7 @@
 #include "Arduino.h"
 
 FakeSerial Serial;
-LSPC::Socket myLspc;
+lspc::Socket myLspc;
 
 void handl(const std::vector<uint8_t>& payload)
 {

@@ -11,7 +11,7 @@
 #include <stdexcept>
 #include <vector>
 
-namespace LSPC
+namespace lspc
 {
 
 class Socket

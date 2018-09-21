@@ -9,7 +9,7 @@
 #include <stdexcept>
 #endif
 
-namespace LSPC
+namespace lspc
 {
 
 class Packet

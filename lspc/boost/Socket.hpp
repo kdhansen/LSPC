@@ -17,7 +17,7 @@
 
 #include "lspc/Packet.hpp"
 
-namespace LSPC
+namespace lspc
 {
 
 class Socket

@@ -7,7 +7,7 @@
 #include "Arduino.h"
 
 FakeSerial Serial;
-LSPC::Socket myLspc;
+lspc::Socket myLspc;
 
 void setup()
 {}

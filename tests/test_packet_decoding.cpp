@@ -15,7 +15,7 @@ int main(int argc, char const *argv[])
     enc_buffer.push_back(atoi(argv[i]));
   }
 
-  LSPC::Packet packet_from_buffer(enc_buffer);
+  lspc::Packet packet_from_buffer(enc_buffer);
 
   auto payload = packet_from_buffer.payload();
   auto packet_type = packet_from_buffer.packetType();

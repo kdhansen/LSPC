@@ -33,7 +33,7 @@ int main(int argc, char const *argv[])
   }
 
   // Code to test
-  LSPC::Socket mySocket;
+  lspc::Socket mySocket;
   open_tries = 5;
   while (! mySocket.isOpen())
   {

@@ -21,7 +21,7 @@ int main(int argc, char const *argv[])
     payload.push_back(atoi(argv[i]));
   }
 
-  LSPC::Packet packet_from_payload(packet_type, payload);
+  lspc::Packet packet_from_payload(packet_type, payload);
 
 #ifndef __EXCEPTIONS
   if (packet_from_payload.isDegenerate())
