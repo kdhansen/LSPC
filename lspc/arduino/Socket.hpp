@@ -38,13 +38,13 @@ public:
   // @param payload A vector with the serialized payload to be sent.
   //
   // @return True if the packet was sent.
-  bool Send(uint8_t type, const std::vector<uint8_t> &payload)
+  bool send(uint8_t type, const std::vector<uint8_t> &payload)
   {
     Packet outPacket(type, payload);
 
     // Send it
-    if (outPacket.EncodedDataSize() ==
-        Serial.write(outPacket.EncodedDataPtr(), outPacket.EncodedDataSize()))
+    if (outPacket.encodedDataSize() ==
+        Serial.write(outPacket.encodedDataPtr(), outPacket.encodedDataSize()))
       return true;
     else
       return false;
@@ -54,7 +54,7 @@ public:
   //
   // @brief Reads the serial buffer and dispatches the received payload to the
   // relevant message handling callback function.
-  void ProcessSerial()
+  void processSerial()
   {
     uint8_t incoming_byte;
     size_t bytecount = 0;
@@ -92,10 +92,10 @@ public:
           if (incoming_length + 3 == incoming_data.size())
           {
             Packet inPacket(incoming_data);
-            auto handler_it = type_handlers.find(inPacket.PacketType());
+            auto handler_it = type_handlers.find(inPacket.packetType());
             if (handler_it != type_handlers.end())
             {
-              handler_it->second(inPacket.Payload());
+              handler_it->second(inPacket.payload());
             }
             else
             {
@@ -120,7 +120,7 @@ public:
   // containing the serialized payload and len the lenght of the payload.
   //
   // @return True if the registration succeeded.
-  bool RegisterCallback(uint8_t type, void (*handler)(const std::vector<uint8_t>&))
+  bool registerCallback(uint8_t type, void (*handler)(const std::vector<uint8_t>&))
   {
     if (type == 0x00)
     {

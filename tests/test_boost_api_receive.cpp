@@ -48,10 +48,10 @@ int main(int argc, char const *argv[])
   // Code to test
   LSPC::Socket mySocket;
   open_tries = 5;
-  while (! mySocket.IsOpen())
+  while (! mySocket.isOpen())
   {
     try {
-      mySocket.Open(recv_port_name);
+      mySocket.open(recv_port_name);
     }
     catch (boost::system::system_error& e)
     {
@@ -62,7 +62,7 @@ int main(int argc, char const *argv[])
       std::this_thread::sleep_for (std::chrono::seconds(1));
     }
   }
-  mySocket.RegisterCallback(1, handl);
+  mySocket.registerCallback(1, handl);
 
   // send some data
   std::array<uint8_t, 9> send_buffer{0, 1, 6, 4, 11, 22, 33, 2, 44};

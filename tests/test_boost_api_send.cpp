@@ -35,10 +35,10 @@ int main(int argc, char const *argv[])
   // Code to test
   LSPC::Socket mySocket;
   open_tries = 5;
-  while (! mySocket.IsOpen())
+  while (! mySocket.isOpen())
   {
     try {
-      mySocket.Open(send_port_name);
+      mySocket.open(send_port_name);
     }
     catch (boost::system::system_error&)
     {
@@ -50,7 +50,7 @@ int main(int argc, char const *argv[])
     }
   }
   std::vector<uint8_t> payload = {11, 22, 33, 0, 44};
-  mySocket.Send(1, payload);
+  mySocket.send(1, payload);
 
   // Wait for data
   std::array<uint8_t, 258> read_buffer;

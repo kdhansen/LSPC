@@ -27,15 +27,15 @@ void setup()
 {
   // Set up fake data
   std::array<uint8_t,9> fakeData = {00, 01, 06, 04, 11, 22, 33, 02, 44};
-  Serial.AppendFakeData(fakeData);
+  Serial.appendFakeData(fakeData);
 
   // Would do this in arduino
-  myLspc.RegisterCallback(1, handl);
+  myLspc.registerCallback(1, handl);
 }
 
 void loop()
 {
-  myLspc.ProcessSerial();
+  myLspc.processSerial();
 }
 
 

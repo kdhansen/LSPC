@@ -45,7 +45,7 @@ class Socket
   //
   // @brief Reads the serial buffer and dispatches the received payload to the
   // relevant message handling callback function.
-  void ProcessSerial(const boost::system::error_code &error,
+  void processSerial(const boost::system::error_code &error,
                      std::size_t bytes_transferred)
   {
     if (error == boost::system::errc::operation_canceled) {
@@ -85,10 +85,10 @@ class Socket
         if (incoming_length + 3 == incoming_data.size())
         {
           Packet inPacket(incoming_data);
-          auto handler_it = type_handlers.find(inPacket.PacketType());
+          auto handler_it = type_handlers.find(inPacket.packetType());
           if (handler_it != type_handlers.end())
           {
-            handler_it->second(inPacket.Payload());
+            handler_it->second(inPacket.payload());
           }
           else
           {
@@ -105,12 +105,12 @@ class Socket
     // READ THE NEXT PACKET
     // Our job here is done. Queue another read.
     boost::asio::async_read(controller_port, boost::asio::buffer(read_buffer),
-                            std::bind(&Socket::ProcessSerial, this, std::placeholders::_1, std::placeholders::_2));
+                            std::bind(&Socket::processSerial, this, std::placeholders::_1, std::placeholders::_2));
 
     return;
   };
 
-  void SerialWriteCallback(const boost::system::error_code &error,
+  void serialWriteCallback(const boost::system::error_code &error,
                            size_t bytes_transferred) {
     serial_is_sending = false;
   }
@@ -123,7 +123,7 @@ public:
   Socket(const std::string& com_port_name)
   : serial_is_sending(false)
   {
-    Open(com_port_name);
+    open(com_port_name);
   };
 
   ~Socket()
@@ -135,7 +135,7 @@ public:
     ioservice_thread.join();
   };
 
-  void Open(const std::string& com_port_name)
+  void open(const std::string& com_port_name)
   {
     if (controller_port.is_open())
     {
@@ -146,12 +146,12 @@ public:
 
     // SYNCHRONIZE ON THE PACKAGE HEADER
     boost::asio::async_read(controller_port, boost::asio::buffer(read_buffer),
-                            std::bind(&Socket::ProcessSerial, this, std::placeholders::_1, std::placeholders::_2));
+                            std::bind(&Socket::processSerial, this, std::placeholders::_1, std::placeholders::_2));
     // Start the I/O service in its own thread.
     ioservice_thread = std::thread( [&] {ioservice.run();} );
   }
 
-  bool IsOpen()
+  bool isOpen()
   {
     return controller_port.is_open();
   }
@@ -164,7 +164,7 @@ public:
   // @param payload A vector with the serialized payload to be sent.
   //
   // @return True if the packet was sent.
-  bool Send(uint8_t type, const std::vector<uint8_t> &payload)
+  bool send(uint8_t type, const std::vector<uint8_t> &payload)
   {
     Packet outPacket(type, payload);
 
@@ -172,8 +172,8 @@ public:
     {
       serial_is_sending = true;
       boost::asio::async_write(controller_port,
-                             boost::asio::buffer(outPacket.EncodedBuffer()),
-                             std::bind(&Socket::SerialWriteCallback, this, std::placeholders::_1, std::placeholders::_2));
+                             boost::asio::buffer(outPacket.encodedBuffer()),
+                             std::bind(&Socket::serialWriteCallback, this, std::placeholders::_1, std::placeholders::_2));
     }
     else
     {
@@ -193,7 +193,7 @@ public:
   // containing the serialized payload and len the lenght of the payload.
   //
   // @return True if the registration succeeded.
-  bool RegisterCallback(uint8_t type, void (*handler)(const std::vector<uint8_t>&))
+  bool registerCallback(uint8_t type, void (*handler)(const std::vector<uint8_t>&))
   {
     if (type == 0x00)
     {

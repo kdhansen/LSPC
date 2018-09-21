@@ -19,11 +19,11 @@ int main(int argc, char const *argv[])
   }
 #endif
   // Getting the output as pointer
-  auto enc_buffer = packet_from_payload.EncodedDataPtr();
-  auto enc_size = packet_from_payload.EncodedDataSize();
+  auto enc_buffer = packet_from_payload.encodedDataPtr();
+  auto enc_size = packet_from_payload.encodedDataSize();
 
   // Getting the output of the encoding again via the std::vector interface.
-  auto enc_buffer_vector = packet_from_payload.EncodedBuffer();
+  auto enc_buffer_vector = packet_from_payload.encodedBuffer();
   // The sizes should be equal.
   if (enc_size != enc_buffer_vector.size())
   {

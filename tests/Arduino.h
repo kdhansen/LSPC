@@ -13,7 +13,7 @@ class FakeSerial
 
 public:
   template <size_t N>
-  void AppendFakeData(std::array<uint8_t, N> data)
+  void appendFakeData(std::array<uint8_t, N> data)
   {
     for(size_t i = 0; i < N; i++)
     {

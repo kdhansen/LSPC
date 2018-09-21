@@ -25,7 +25,7 @@ class Packet
   //
   // @return True if encoding succeeded, false if if the input is more than 254
   // bytes.
-  void EncodePayload(const std::vector<uint8_t> &input)
+  void encodePayload(const std::vector<uint8_t> &input)
   {
     size_t output_offset = 3;
     size_t code_idx = output_offset;
@@ -57,7 +57,7 @@ class Packet
   //
   // @return True if decoding succeded, false if the input is zero-size or
   // wrongly encoded.
-  bool DecodePayload(std::vector<uint8_t> &output)
+  bool decodePayload(std::vector<uint8_t> &output)
   {
     size_t dec_payload_size = encoded_buffer_.size() - 4;
     output.resize(dec_payload_size);
@@ -130,7 +130,7 @@ class Packet
       #endif
     }
 
-    if (! DecodePayload(decoded_payload_))
+    if (! decodePayload(decoded_payload_))
     {
       degenerate_ = true;
       #ifdef __EXCEPTIONS
@@ -178,35 +178,35 @@ class Packet
     }
 
     // Encode the payload
-    EncodePayload(payload);
+    encodePayload(payload);
   }
 
-  uint8_t* EncodedDataPtr()
+  uint8_t* encodedDataPtr()
   {
     return encoded_buffer_.data();
   }
 
-  size_t EncodedDataSize()
+  size_t encodedDataSize()
   {
     return encoded_buffer_.size();
   }
 
-  std::vector<uint8_t> EncodedBuffer()
+  std::vector<uint8_t> encodedBuffer()
   {
     return encoded_buffer_;
   }
 
-  uint8_t PacketType()
+  uint8_t packetType()
   {
     return packet_type_;
   }
 
-  bool IsDegenerate()
+  bool isDegenerate()
   {
     return degenerate_;
   }
 
-  std::vector<uint8_t> Payload()
+  std::vector<uint8_t> payload()
   {
     return decoded_payload_;
   }

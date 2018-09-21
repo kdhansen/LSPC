@@ -15,7 +15,7 @@ void setup()
 void loop()
 {
   std::vector<uint8_t> payload = {11, 22, 33, 0, 44};
-  myLspc.Send(1, payload);
+  myLspc.send(1, payload);
 }
 
 

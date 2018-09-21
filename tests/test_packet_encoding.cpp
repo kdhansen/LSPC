@@ -24,13 +24,13 @@ int main(int argc, char const *argv[])
   LSPC::Packet packet_from_payload(packet_type, payload);
 
 #ifndef __EXCEPTIONS
-  if (packet_from_payload.IsDegenerate())
+  if (packet_from_payload.isDegenerate())
   {
     return 1;
   }
 #endif
-  auto enc_buffer = packet_from_payload.EncodedDataPtr();
-  auto enc_size = packet_from_payload.EncodedDataSize();
+  auto enc_buffer = packet_from_payload.encodedDataPtr();
+  auto enc_size = packet_from_payload.encodedDataSize();
   for (size_t i = 0; i < enc_size; ++i)
   {
     std::cout << " " << int(enc_buffer[i]);
@@ -38,7 +38,7 @@ int main(int argc, char const *argv[])
   std::cout << '\n';
 
   // Getting the output of the encoding again via the std::vector interface.
-  auto enc_buffer_vector = packet_from_payload.EncodedBuffer();
+  auto enc_buffer_vector = packet_from_payload.encodedBuffer();
   // The sizes should be equal.
   if (enc_size != enc_buffer_vector.size())
   {

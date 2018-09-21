@@ -17,8 +17,8 @@ int main(int argc, char const *argv[])
 
   LSPC::Packet packet_from_buffer(enc_buffer);
 
-  auto payload = packet_from_buffer.Payload();
-  auto packet_type = packet_from_buffer.PacketType();
+  auto payload = packet_from_buffer.payload();
+  auto packet_type = packet_from_buffer.packetType();
   std::cout << "Payload:";
   for (auto i : payload)
   {
