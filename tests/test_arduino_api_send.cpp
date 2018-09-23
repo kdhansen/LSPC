@@ -9,14 +9,34 @@
 FakeSerial Serial;
 lspc::Socket myLspc;
 
-void setup()
-{}
+class Type1Object : public lspc::Serializable
+{
+  std::vector<uint8_t> payload_ = {55, 66, 77, 0, 88};
+  uint8_t type_ = 1;
 
-void loop()
+public:
+  std::vector<uint8_t> serialize() override
+  {
+    return payload_;
+  }
+
+  uint8_t type() override
+  {
+    return type_;
+  }
+};
+
+void setup()
 {
   std::vector<uint8_t> payload = {11, 22, 33, 0, 44};
   myLspc.send(1, payload);
+
+  Type1Object obj;
+  myLspc.send(obj);
 }
+
+void loop()
+{}
 
 
 int main(int argc, char const *argv[])

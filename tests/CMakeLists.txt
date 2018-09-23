@@ -164,10 +164,8 @@ add_test(NAME PacketOutput COMMAND test_packet_output)
 add_executable(test_arduino_api_send test_arduino_api_send.cpp)
 add_test(NAME ArduinoApiSend COMMAND test_arduino_api_send)
 set_tests_properties (ArduinoApiSend PROPERTIES
-  PASS_REGULAR_EXPRESSION " 0x00 0x01 0x06 0x04 0x0b 0x16 0x21 0x02 0x2c 0x00 \
-0x01 0x06 0x04 0x0b 0x16 0x21 0x02 0x2c 0x00 0x01 0x06 0x04 0x0b 0x16 0x21 \
-0x02 0x2c 0x00 0x01 0x06 0x04 0x0b 0x16 0x21 0x02 0x2c 0x00 0x01 0x06 0x04 \
-0x0b 0x16 0x21 0x02 0x2c\n")
+  PASS_REGULAR_EXPRESSION " 0x00 0x01 0x06 0x04 0x0b 0x16 0x21 0x02 0x2c \
+0x00 0x01 0x06 0x04 0x37 0x42 0x4d 0x02 0x58\n")
 
 add_executable(test_arduino_api_receive test_arduino_api_receive.cpp)
 add_test(NAME ArduinoApiReceive COMMAND test_arduino_api_receive)
@@ -180,7 +178,7 @@ add_executable(test_boost_api_send test_boost_api_send.cpp)
 target_link_libraries(test_boost_api_send ${Boost_LIBRARIES} ws2_32)
 add_test(NAME BoostApiSend COMMAND test_boost_api_send COM8 COM9)
 set_tests_properties (BoostApiSend PROPERTIES
-  PASS_REGULAR_EXPRESSION " 0 1 6 4 11 22 33 2 44")
+  PASS_REGULAR_EXPRESSION " 0 1 6 4 11 22 33 2 44\n 0 1 6 4 55 66 77 2 88")
 
 add_executable(test_boost_api_receive test_boost_api_receive.cpp)
 target_link_libraries(test_boost_api_receive ${Boost_LIBRARIES} ws2_32)

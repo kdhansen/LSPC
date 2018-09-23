@@ -16,15 +16,14 @@
 #include <boost/asio/serial_port.hpp>
 
 #include "lspc/Packet.hpp"
+#include "lspc/SocketBase.hpp"
 
 namespace lspc
 {
 
-class Socket
+class Socket : public SocketBase
 {
-  // Members for receiving data on the serial link.
-  uint8_t incoming_length = 0;
-  std::vector<uint8_t> incoming_data;
+  // Buffer for receiving data on the serial link.
   std::array<uint8_t, 1> read_buffer;
 
   // Serial port
@@ -32,14 +31,6 @@ class Socket
   boost::asio::serial_port controller_port = boost::asio::serial_port(ioservice);
   std::thread ioservice_thread;
   std::atomic<bool> serial_is_sending;
-
-  // FSM for receiving
-  enum class LookingFor {header, type, length, data};
-  LookingFor fsr_state = LookingFor::header;
-
-  // Map of callback functions to handle the incoming messages.
-  std::map<uint8_t, void (*)(const std::vector<uint8_t>&)> type_handlers;
-
 
   // Process incoming data on serial link
   //
@@ -55,52 +46,7 @@ class Socket
     }
 
     uint8_t incoming_byte = read_buffer[0];
-
-    switch (fsr_state)
-    {
-      case LookingFor::header:
-        if (incoming_byte == 0x00)
-        {
-          incoming_data.push_back(incoming_byte);
-          fsr_state = LookingFor::type;
-        }
-        break;
-      case LookingFor::type:
-        if (incoming_byte != 0x00)
-        {
-          incoming_data.push_back(incoming_byte);
-          fsr_state = LookingFor::length;
-        }
-        break;
-      case LookingFor::length:
-        incoming_length = incoming_byte;
-        incoming_data.push_back(incoming_byte);
-        fsr_state = LookingFor::data;
-        break;
-      case LookingFor::data:
-        // Record the data
-        incoming_data.push_back(incoming_byte);
-
-        // If we got it all, decode it and invoke the handler
-        if (incoming_length + 3 == incoming_data.size())
-        {
-          Packet inPacket(incoming_data);
-          auto handler_it = type_handlers.find(inPacket.packetType());
-          if (handler_it != type_handlers.end())
-          {
-            handler_it->second(inPacket.payload());
-          }
-          else
-          {
-            // We didn't find the handler.
-          }
-          // Reset to receive the next.
-          fsr_state = LookingFor::header;
-          incoming_data.clear();
-        }
-        break;
-    }
-
+    processIncomingByte(incoming_byte);
 
     // READ THE NEXT PACKET
     // Our job here is done. Queue another read.
@@ -108,7 +54,7 @@ class Socket
                             std::bind(&Socket::processSerial, this, std::placeholders::_1, std::placeholders::_2));
 
     return;
-  };
+  }
 
   void serialWriteCallback(const boost::system::error_code &error,
                            size_t bytes_transferred) {
@@ -118,13 +64,13 @@ class Socket
 public:
   Socket()
   : serial_is_sending(false)
-  {};
+  {}
 
   Socket(const std::string& com_port_name)
   : serial_is_sending(false)
   {
     open(com_port_name);
-  };
+  }
 
   ~Socket()
   {
@@ -133,7 +79,7 @@ public:
     ioservice.stop();
     ioservice.reset();
     ioservice_thread.join();
-  };
+  }
 
   void open(const std::string& com_port_name)
   {
@@ -156,6 +102,8 @@ public:
     return controller_port.is_open();
   }
 
+  using SocketBase::send;
+
   // Send a package with lspc
   //
   // @brief Sends a packaged buffer over the USB serial link.
@@ -164,7 +112,7 @@ public:
   // @param payload A vector with the serialized payload to be sent.
   //
   // @return True if the packet was sent.
-  bool send(uint8_t type, const std::vector<uint8_t> &payload)
+  bool send(uint8_t type, const std::vector<uint8_t> &payload) override
   {
     Packet outPacket(type, payload);
 
@@ -180,30 +128,7 @@ public:
       return false;
     }
     return true;
-  };
-
-
-
-  // Register a callback to handle incoming messages
-  //
-  // @param type The message type to handle. The type is user specific; any
-  // number 1-255.
-  // @param handler Callback function of the form void
-  // callback(uint8_t* payload, size_t len). With payload being a buffer
-  // containing the serialized payload and len the lenght of the payload.
-  //
-  // @return True if the registration succeeded.
-  bool registerCallback(uint8_t type, void (*handler)(const std::vector<uint8_t>&))
-  {
-    if (type == 0x00)
-    {
-      return false;
-    }
-
-    type_handlers[type] = handler;
-
-    return true;
-  };
+  }
 };
 
 } // namespace LSPC
