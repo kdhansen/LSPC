@@ -56,7 +56,7 @@ protected:
         incoming_data.push_back(incoming_byte);
 
         // If we got it all, decode it and invoke the handler
-        if (incoming_length + 3 == incoming_data.size())
+        if (size_t(incoming_length + 3) == incoming_data.size())
         {
           Packet inPacket(incoming_data);
           auto handler_it = type_handlers.find(inPacket.packetType());

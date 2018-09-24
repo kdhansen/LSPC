@@ -122,7 +122,7 @@ class Packet
       #endif
     }
 
-    if (encoded_buffer_.size() != encoded_buffer_[2] + 3)
+    if (encoded_buffer_.size() != size_t(encoded_buffer_[2] + 3))
     {
       degenerate_ = true;
       #ifdef __EXCEPTIONS

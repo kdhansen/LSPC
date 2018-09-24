@@ -52,7 +52,6 @@ public:
   // relevant message handling callback function.
   void processSerial()
   {
-    uint8_t incoming_byte;
     size_t bytecount = 0;
     while (Serial.available() && bytecount < 10)
     {
