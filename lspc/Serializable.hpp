@@ -10,8 +10,8 @@ namespace lspc
 class Serializable
 {
 public:
-  virtual std::vector<uint8_t> serialize() = 0;
-  virtual uint8_t type() = 0;
+  virtual std::vector<uint8_t> serialize() const = 0;
+  virtual uint8_t type() const = 0;
 };
 
 } // namespace lspc

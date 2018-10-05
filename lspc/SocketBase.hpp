@@ -95,7 +95,7 @@ public:
   // @param obj The object to send.
   //
   // @return True if the object was sent.
-  bool send(lspc::Serializable & obj)
+  bool send(const lspc::Serializable & obj)
   {
     return send(obj.type(), obj.serialize());
   }
