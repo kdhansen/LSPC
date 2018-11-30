@@ -11,12 +11,12 @@ class Type1Object : public lspc::Serializable
   uint8_t type_ = 1;
 
 public:
-  std::vector<uint8_t> serialize() override
+  std::vector<uint8_t> serialize() const override
   {
     return payload_;
   }
 
-  uint8_t type() override
+  uint8_t type() const override
   {
     return type_;
   }

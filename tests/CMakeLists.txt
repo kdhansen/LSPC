@@ -1,6 +1,9 @@
 find_package(Boost REQUIRED system)
+find_package (Threads REQUIRED)
 
 include(CTest)
+
+add_compile_options(-std=c++11)
 
 include_directories(.)
 include_directories(${Boost_INCLUDE_DIRS})
@@ -175,14 +178,20 @@ set_tests_properties (ArduinoApiReceive PROPERTIES
 
 ###### Boost API test ######
 add_executable(test_boost_api_send test_boost_api_send.cpp)
-target_link_libraries(test_boost_api_send ${Boost_LIBRARIES} ws2_32)
-add_test(NAME BoostApiSend COMMAND test_boost_api_send COM8 COM9)
+target_link_libraries(test_boost_api_send ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+if(WIN32)
+  target_link_libraries(test_boost_api_send ws2_32)
+endif()
+add_test(NAME BoostApiSend COMMAND test_boost_api_send /dev/pts/18 /dev/pts/19)
 set_tests_properties (BoostApiSend PROPERTIES
   PASS_REGULAR_EXPRESSION " 0 1 6 4 11 22 33 2 44\n 0 1 6 4 55 66 77 2 88")
 
 add_executable(test_boost_api_receive test_boost_api_receive.cpp)
-target_link_libraries(test_boost_api_receive ${Boost_LIBRARIES} ws2_32)
-add_test(NAME BoostApiReceive COMMAND test_boost_api_receive COM8 COM9)
+target_link_libraries(test_boost_api_receive ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+if(WIN32)
+  target_link_libraries(test_boost_api_receive ws2_32)
+endif()
+add_test(NAME BoostApiReceive COMMAND test_boost_api_receive /dev/pts/18 /dev/pts/19)
 set_tests_properties (BoostApiReceive PROPERTIES
   PASS_REGULAR_EXPRESSION "Handling: 0x0b 0x16 0x21 0x00 0x2c\n")
 set_tests_properties (BoostApiReceive PROPERTIES
