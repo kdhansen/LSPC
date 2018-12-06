@@ -1,4 +1,4 @@
-#include "lspc/packet.hpp"
+#include "lspc/Packet.hpp"
 
 #include <cstdint>
 #include <cstdlib>

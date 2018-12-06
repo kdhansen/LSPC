@@ -15,10 +15,18 @@ int main(int argc, char const *argv[])
     enc_buffer.push_back(atoi(argv[i]));
   }
 
-  lspc::Packet packet_from_buffer(enc_buffer);
+  std::unique_ptr<lspc::Packet> packet_from_buffer;
+  try
+  {
+    packet_from_buffer = std::unique_ptr<lspc::Packet>(new lspc::Packet(enc_buffer));
+  }
+  catch(...)
+  {
+    return EXIT_FAILURE;
+  }
 
-  auto payload = packet_from_buffer.payload();
-  auto packet_type = packet_from_buffer.packetType();
+  auto payload = packet_from_buffer->payload();
+  auto packet_type = packet_from_buffer->packetType();
   std::cout << "Payload:";
   for (auto i : payload)
   {

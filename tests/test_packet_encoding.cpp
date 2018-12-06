@@ -21,16 +21,25 @@ int main(int argc, char const *argv[])
     payload.push_back(atoi(argv[i]));
   }
 
-  lspc::Packet packet_from_payload(packet_type, payload);
-
-#ifndef __EXCEPTIONS
-  if (packet_from_payload.isDegenerate())
+  std::unique_ptr<lspc::Packet> packet_from_payload;
+#ifdef __EXCEPTIONS
+  try
+  {
+    packet_from_payload = std::unique_ptr<lspc::Packet>(new lspc::Packet(packet_type, payload));
+  }
+  catch(...)
+  {
+    return EXIT_FAILURE;
+  }
+#else
+  packet_from_payload = std::unique_ptr<lspc::Packet>(new lspc::Packet(packet_type, payload));
+  if (packet_from_payload->isDegenerate())
   {
     return 1;
   }
 #endif
-  auto enc_buffer = packet_from_payload.encodedDataPtr();
-  auto enc_size = packet_from_payload.encodedDataSize();
+  auto enc_buffer = packet_from_payload->encodedDataPtr();
+  auto enc_size = packet_from_payload->encodedDataSize();
   for (size_t i = 0; i < enc_size; ++i)
   {
     std::cout << " " << int(enc_buffer[i]);
@@ -38,7 +47,7 @@ int main(int argc, char const *argv[])
   std::cout << '\n';
 
   // Getting the output of the encoding again via the std::vector interface.
-  auto enc_buffer_vector = packet_from_payload.encodedBuffer();
+  auto enc_buffer_vector = packet_from_payload->encodedBuffer();
   // The sizes should be equal.
   if (enc_size != enc_buffer_vector.size())
   {
